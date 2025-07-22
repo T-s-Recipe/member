@@ -1,0 +1,12 @@
+spring:
+  application:
+    name: member
+  data:
+    mongodb:
+      uri: ${MONGO_URL}
+    redis:
+      repositories:
+        enabled: false
+
+server:
+  port: 8020
