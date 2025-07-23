@@ -50,8 +50,8 @@ jobs:
         run: |
           echo "${{ secrets.KUBECONFIG }}" | base64 --decode > $KUBECONFIG_PATH
           chmod 600 $KUBECONFIG_PATH
-          kubectl --kubeconfig=$KUBECONFIG_PATH rollout restart deployment/${{ vars.DOCKER_REPO_MEMBER }}
-          kubectl --kubeconfig=$KUBECONFIG_PATH rollout status deployment/${{ vars.DOCKER_REPO_MEMBER }}
+          kubectl --kubeconfig=$KUBECONFIG_PATH rollout restart deployment/member
+          kubectl --kubeconfig=$KUBECONFIG_PATH rollout status deployment/member
 
       - name: Clean Up Docker Resources
         if: always()
