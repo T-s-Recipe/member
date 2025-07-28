@@ -4,6 +4,8 @@ import io.swagger.v3.oas.annotations.media.Schema
 import org.bson.types.ObjectId
 import shop.tsrecipe.member.domain.OAuthInfo
 import shop.tsrecipe.member.domain.OAuthProvider
+import shop.tsrecipe.member.exception.BaseException
+import shop.tsrecipe.member.exception.ErrorCode
 import shop.tsrecipe.member.service.GetMemberQuery
 import shop.tsrecipe.member.service.SignUpCommand
 
@@ -74,13 +76,28 @@ data class GetMemberRequest(
     @field:Schema(description = "OAuth ID")
     val oAuthId: String?
 ) {
+    fun validate(): GetMemberRequest {
+        val hasMemberId = !memberId.isNullOrBlank()
+        val hasOAuthProvider = oAuthProvider != null
+        val hasOAuthId = !oAuthId.isNullOrBlank()
+
+        if (!hasMemberId && !(hasOAuthProvider && hasOAuthId)) {
+            throw BaseException(ErrorCode.BAD_REQUEST)
+        }
+
+        if (hasOAuthProvider != hasOAuthId) {
+            throw BaseException(ErrorCode.BAD_REQUEST)
+        }
+        return this
+    }
+
     fun toQuery(): GetMemberQuery {
         val oauthInfo =
             if (this.oAuthProvider == null || oAuthId == null) null
             else OAuthInfo(this.oAuthProvider, this.oAuthId)
 
         return GetMemberQuery(
-            memberId = ObjectId(this.memberId),
+            memberId = this.memberId?.let { ObjectId(it) },
             oauthInfo = oauthInfo
         )
     }

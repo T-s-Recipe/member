@@ -11,6 +11,6 @@ data class SignUpCommand(
 )
 
 data class GetMemberQuery(
-    val memberId: ObjectId? = null,
-    val oauthInfo: OAuthInfo? = null
+    val memberId: ObjectId?,
+    val oauthInfo: OAuthInfo?
 )
