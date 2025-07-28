@@ -29,10 +29,7 @@ class MemberService(
         return if (query.memberId != null) {
             memberReader.findOneById(query.memberId) ?: throw BaseException(ErrorCode.MEMBER_NOT_FOUND)
         } else {
-            if (query.oauthInfo == null) {
-                throw BaseException(ErrorCode.BAD_REQUEST)
-            }
-            memberReader.findOneByOAuthInfo(query.oauthInfo) ?: throw BaseException(ErrorCode.MEMBER_NOT_FOUND)
+            memberReader.findOneByOAuthInfo(query.oauthInfo!!) ?: throw BaseException(ErrorCode.MEMBER_NOT_FOUND)
         }
     }
 }
