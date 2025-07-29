@@ -1,4 +1,6 @@
 spring:
+  webflux:
+    base-path: /members
   application:
     name: member
   data:

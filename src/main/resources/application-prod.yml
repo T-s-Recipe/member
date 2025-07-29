@@ -1,4 +1,6 @@
 spring:
+  webflux:
+    base-path: /members
   application:
     name: member
   data:
@@ -10,3 +12,9 @@ spring:
 
 server:
   port: 8020
+
+springdoc:
+  swagger-ui:
+    enabled: false
+  api-docs:
+    enabled: false
