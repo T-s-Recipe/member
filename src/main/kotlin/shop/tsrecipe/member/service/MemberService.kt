@@ -6,11 +6,13 @@ import shop.tsrecipe.member.domain.OAuthInfo
 import shop.tsrecipe.member.exception.BaseException
 import shop.tsrecipe.member.exception.ErrorCode
 import shop.tsrecipe.member.util.Logging
+import shop.tsrecipe.member.util.NicknameManager
 
 @Service
 class MemberService(
     private val memberManager: MemberManager,
-    private val memberReader: MemberReader
+    private val memberReader: MemberReader,
+    private val nicknameManager: NicknameManager
 ): Logging {
     suspend fun signUp(command: SignUpCommand): Member {
         if (isDuplicated(command.oAuthInfo)) throw BaseException(ErrorCode.MEMBER_DUPLICATED)
@@ -31,5 +33,9 @@ class MemberService(
         } else {
             memberReader.findOneByOAuthInfo(query.oauthInfo!!) ?: throw BaseException(ErrorCode.MEMBER_NOT_FOUND)
         }
+    }
+
+    suspend fun getNicknameByRandom(): String {
+        return nicknameManager.getRandom()
     }
 }

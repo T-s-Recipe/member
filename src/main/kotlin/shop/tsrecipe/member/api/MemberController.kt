@@ -47,4 +47,15 @@ class MemberController(
             body = memberService.getMember(request.toQuery()).toResponse()
         )
     }
+
+    @Operation(
+        summary = "랜덤 닉네임 조회",
+        description = "랜덤한 조합의 닉네임을 반환합니다."
+    )
+    @GetMapping("/nickname")
+    suspend fun getRandomNickname(): ResponseEntity<String> {
+        return baseResponse(
+            body = memberService.getNicknameByRandom()
+        )
+    }
 }
