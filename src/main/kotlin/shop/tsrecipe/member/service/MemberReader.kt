@@ -6,7 +6,6 @@ import org.springframework.data.mongodb.core.ReactiveMongoTemplate
 import org.springframework.stereotype.Repository
 import shop.tsrecipe.member.domain.Member
 import shop.tsrecipe.member.domain.OAuthInfo
-import shop.tsrecipe.member.domain.OAuthProvider
 import shop.tsrecipe.member.repository.MemberRepository
 
 @Repository
@@ -18,7 +17,7 @@ class MemberReader(
         return memberRepository.findById(id).awaitSingleOrNull()
     }
 
-    suspend fun findOneByOAuthInfo(oAuthInfo: OAuthInfo): Member? {
-        return memberRepository.findByOAuthInfoProviderAndOAuthInfoId(oAuthInfo.provider, oAuthInfo.id).awaitSingleOrNull()
+    suspend fun findOneByOAuthInfo(oauthInfo: OAuthInfo): Member? {
+        return memberRepository.findByOauthInfoProviderAndOauthInfoId(oauthInfo.provider, oauthInfo.id).awaitSingleOrNull()
     }
 }

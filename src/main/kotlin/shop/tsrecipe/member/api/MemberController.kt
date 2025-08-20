@@ -32,16 +32,16 @@ class MemberController(
     
         하위 두 조합 중 하나를 필수로 만족해야 합니다.
         - memberId
-        - (oAuthProvider, oAuthId)
+        - (oauthProvider, oauthId)
         """
     )
     @GetMapping
     suspend fun getMember(
         @RequestParam(required = false) memberId: String?,
-        @RequestParam(required = false) oAuthProvider: OAuthProvider?,
-        @RequestParam(required = false) oAuthId: String?
+        @RequestParam(required = false) oauthProvider: OAuthProvider?,
+        @RequestParam(required = false) oauthId: String?
     ): ResponseEntity<MemberResponse> {
-        val request = GetMemberRequest(memberId, oAuthProvider, oAuthId).validate()
+        val request = GetMemberRequest(memberId, oauthProvider, oauthId).validate()
 
         return baseResponse(
             body = memberService.getMember(request.toQuery()).toResponse()

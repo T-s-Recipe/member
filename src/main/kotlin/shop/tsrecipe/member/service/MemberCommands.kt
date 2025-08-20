@@ -4,7 +4,7 @@ import org.bson.types.ObjectId
 import shop.tsrecipe.member.domain.OAuthInfo
 
 data class SignUpCommand(
-    val oAuthInfo: OAuthInfo,
+    val oauthInfo: OAuthInfo,
     val nickname: String
 )
 

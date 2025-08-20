@@ -7,5 +7,5 @@ import shop.tsrecipe.member.domain.Member
 import shop.tsrecipe.member.domain.OAuthProvider
 
 interface MemberRepository: ReactiveMongoRepository<Member, ObjectId> {
-    fun findByOAuthInfoProviderAndOAuthInfoId(provider: OAuthProvider, id: String): Mono<Member>
+    fun findByOauthInfoProviderAndOauthInfoId(provider: OAuthProvider, id: String): Mono<Member>
 }

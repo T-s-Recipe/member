@@ -12,17 +12,17 @@ import shop.tsrecipe.member.service.SignUpCommand
 @Schema(description = "회원 가입 RequestDTO")
 data class SignUpRequest(
     @field:Schema(description = "OAuth Provider (GOOGLE, APPLE)")
-    val oAuthProvider: OAuthProvider,
+    val oauthProvider: OAuthProvider,
 
     @field:Schema(description = "OAuth ID")
-    val oAuthId: String,
+    val oauthId: String,
 
     @field:Schema(description = "닉네임")
     val nickname: String
 ) {
     fun toCommand(): SignUpCommand {
         return SignUpCommand(
-            oAuthInfo = OAuthInfo(this.oAuthProvider, this.oAuthId),
+            oauthInfo = OAuthInfo(this.oauthProvider, this.oauthId),
             nickname = this.nickname,
         )
     }
@@ -34,10 +34,10 @@ data class MemberResponse(
     val id: String,
 
     @field:Schema(description = "OAuth Provider (GOOGLE, APPLE)")
-    val oAuthProvider: OAuthProvider,
+    val oauthProvider: OAuthProvider,
 
     @field:Schema(description = "OAuth ID")
-    val oAuthId: String,
+    val oauthId: String,
 
     @field:Schema(description = "닉네임")
     val nickname: String
@@ -49,7 +49,7 @@ data class MemberResponse(
     
     하위 두 조합 중 하나를 필수로 만족해야 합니다.
     - memberId
-    - (oAuthProvider, oAuthId)
+    - (oauthProvider, oauthId)
 """
 )
 data class GetMemberRequest(
@@ -57,15 +57,15 @@ data class GetMemberRequest(
     val memberId: String?,
 
     @field:Schema(description = "OAuth Provider (GOOGLE, APPLE)")
-    val oAuthProvider: OAuthProvider?,
+    val oauthProvider: OAuthProvider?,
 
     @field:Schema(description = "OAuth ID")
-    val oAuthId: String?
+    val oauthId: String?
 ) {
     fun validate(): GetMemberRequest {
         val hasMemberId = !memberId.isNullOrBlank()
-        val hasOAuthProvider = oAuthProvider != null
-        val hasOAuthId = !oAuthId.isNullOrBlank()
+        val hasOAuthProvider = oauthProvider != null
+        val hasOAuthId = !oauthId.isNullOrBlank()
 
         if (!hasMemberId && !(hasOAuthProvider && hasOAuthId)) {
             throw BaseException(ErrorCode.BAD_REQUEST)
@@ -78,13 +78,13 @@ data class GetMemberRequest(
     }
 
     fun toQuery(): GetMemberQuery {
-        val oAuthInfo =
-            if (this.oAuthProvider == null || oAuthId == null) null
-            else OAuthInfo(this.oAuthProvider, this.oAuthId)
+        val oauthInfo =
+            if (this.oauthProvider == null || oauthId == null) null
+            else OAuthInfo(this.oauthProvider, this.oauthId)
 
         return GetMemberQuery(
             memberId = this.memberId?.let { ObjectId(it) },
-            oauthInfo = oAuthInfo
+            oauthInfo = oauthInfo
         )
     }
 }

@@ -12,7 +12,7 @@ class MemberManager(
     suspend fun create(command: SignUpCommand): Member? {
         return memberRepository.save(
             Member(
-                oAuthInfo = command.oAuthInfo,
+                oauthInfo = command.oauthInfo,
                 nickname = command.nickname
             )
         ).awaitSingleOrNull()
