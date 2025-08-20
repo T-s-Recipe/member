@@ -5,8 +5,6 @@ import shop.tsrecipe.member.domain.OAuthInfo
 
 data class SignUpCommand(
     val oAuthInfo: OAuthInfo,
-    val name: String,
-    val email: String?,
     val nickname: String
 )
 

@@ -5,10 +5,8 @@ import shop.tsrecipe.member.api.MemberResponse
 fun Member.toResponse(): MemberResponse {
     return MemberResponse(
         id = this.id.toString(),
-        oauthProvider = this.oAuthInfo.provider,
-        oauthId = this.oAuthInfo.id,
-        name = this.name,
-        email = this.email,
+        oAuthProvider = this.oAuthInfo.provider,
+        oAuthId = this.oAuthInfo.id,
         nickname = this.nickname,
     )
 }

@@ -12,25 +12,17 @@ import shop.tsrecipe.member.service.SignUpCommand
 @Schema(description = "회원 가입 RequestDTO")
 data class SignUpRequest(
     @field:Schema(description = "OAuth Provider (GOOGLE, APPLE)")
-    val oauthProvider: OAuthProvider,
+    val oAuthProvider: OAuthProvider,
 
     @field:Schema(description = "OAuth ID")
-    val oauthId: String,
-
-    @field:Schema(description = "이름")
-    val name: String,
-
-    @field:Schema(description = "이메일")
-    val email: String?,
+    val oAuthId: String,
 
     @field:Schema(description = "닉네임")
     val nickname: String
 ) {
     fun toCommand(): SignUpCommand {
         return SignUpCommand(
-            oAuthInfo = OAuthInfo(this.oauthProvider, this.oauthId),
-            name = this.name,
-            email = this.email,
+            oAuthInfo = OAuthInfo(this.oAuthProvider, this.oAuthId),
             nickname = this.nickname,
         )
     }
@@ -42,16 +34,10 @@ data class MemberResponse(
     val id: String,
 
     @field:Schema(description = "OAuth Provider (GOOGLE, APPLE)")
-    val oauthProvider: OAuthProvider,
+    val oAuthProvider: OAuthProvider,
 
     @field:Schema(description = "OAuth ID")
-    val oauthId: String,
-
-    @field:Schema(description = "이름")
-    val name: String,
-
-    @field:Schema(description = "이메일")
-    val email: String?,
+    val oAuthId: String,
 
     @field:Schema(description = "닉네임")
     val nickname: String
@@ -92,13 +78,13 @@ data class GetMemberRequest(
     }
 
     fun toQuery(): GetMemberQuery {
-        val oauthInfo =
+        val oAuthInfo =
             if (this.oAuthProvider == null || oAuthId == null) null
             else OAuthInfo(this.oAuthProvider, this.oAuthId)
 
         return GetMemberQuery(
             memberId = this.memberId?.let { ObjectId(it) },
-            oauthInfo = oauthInfo
+            oauthInfo = oAuthInfo
         )
     }
 }
