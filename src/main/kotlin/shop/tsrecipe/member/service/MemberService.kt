@@ -15,7 +15,7 @@ class MemberService(
     private val nicknameManager: NicknameManager
 ): Logging {
     suspend fun signUp(command: SignUpCommand): Member {
-        if (isDuplicated(command.oAuthInfo)) throw BaseException(ErrorCode.MEMBER_DUPLICATED)
+        if (isDuplicated(command.oauthInfo)) throw BaseException(ErrorCode.MEMBER_DUPLICATED)
 
         return memberManager.create(command) ?: run {
             logger.warn { "DB save failed.\n" }
@@ -23,8 +23,8 @@ class MemberService(
         }
     }
 
-    private suspend fun isDuplicated(oAuthInfo: OAuthInfo): Boolean {
-        return memberReader.findOneByOAuthInfo(oAuthInfo) != null
+    private suspend fun isDuplicated(oauthInfo: OAuthInfo): Boolean {
+        return memberReader.findOneByOAuthInfo(oauthInfo) != null
     }
 
     suspend fun getMember(query: GetMemberQuery): Member {
