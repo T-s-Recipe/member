@@ -15,8 +15,6 @@ class Member(
     @Id
     val id: ObjectId = ObjectId.get(),
     val oAuthInfo: OAuthInfo,
-    val name: String,
-    val email: String?,
     val nickname: String
 ): Auditable()
 
