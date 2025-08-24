@@ -2,6 +2,7 @@ package shop.tsrecipe.member.api
 
 import io.swagger.v3.oas.annotations.Operation
 import io.swagger.v3.oas.annotations.tags.Tag
+import org.bson.types.ObjectId
 import org.springframework.http.ResponseEntity
 import org.springframework.web.bind.annotation.*
 import shop.tsrecipe.member.domain.OAuthProvider
@@ -23,6 +24,28 @@ class MemberController(
         return baseResponse(
             body = memberService.signUp(request.toCommand()).toResponse()
         )
+    }
+
+    @Operation(
+        summary = "회원 정보 수정",
+        description = "회원 정보 수정 API"
+    )
+    @PatchMapping
+    suspend fun update(@RequestBody request: MemberUpdateRequest): ResponseEntity<MemberResponse> {
+        return baseResponse(
+            body = memberService.update(request.toCommand()).toResponse()
+        )
+    }
+
+    @Operation(
+        summary = "회원 탈퇴",
+        description = "회원 탈퇴 API"
+    )
+    @DeleteMapping("/{memberId}")
+    suspend fun withdrawal(@PathVariable memberId: String): ResponseEntity<Void> {
+        memberService.withdrawal(ObjectId(memberId))
+
+        return ResponseEntity.noContent().build()
     }
 
     @Operation(

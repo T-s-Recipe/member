@@ -8,5 +8,6 @@ fun Member.toResponse(): MemberResponse {
         oauthProvider = this.oauthInfo.provider,
         oauthId = this.oauthInfo.id,
         nickname = this.nickname,
+        isVerified = this.isVerified
     )
 }

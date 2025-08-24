@@ -8,6 +8,7 @@ import shop.tsrecipe.member.exception.BaseException
 import shop.tsrecipe.member.exception.ErrorCode
 import shop.tsrecipe.member.service.GetMemberQuery
 import shop.tsrecipe.member.service.SignUpCommand
+import shop.tsrecipe.member.service.MemberUpdateCommand
 
 @Schema(description = "회원 가입 RequestDTO")
 data class SignUpRequest(
@@ -40,7 +41,10 @@ data class MemberResponse(
     val oauthId: String,
 
     @field:Schema(description = "닉네임")
-    val nickname: String
+    val nickname: String,
+
+    @field:Schema(description = "인증 여부")
+    val isVerified: Boolean
 )
 
 @Schema(
@@ -85,6 +89,21 @@ data class GetMemberRequest(
         return GetMemberQuery(
             memberId = this.memberId?.let { ObjectId(it) },
             oauthInfo = oauthInfo
+        )
+    }
+}
+
+@Schema(description = "회원 정보 수정 RequestDTO")
+data class MemberUpdateRequest(
+    @field:Schema(description = "Member ID")
+    val id: String,
+
+    @field:Schema(description = "닉네임")
+    val nickname: String
+) {
+    fun toCommand(): MemberUpdateCommand {
+        return MemberUpdateCommand(
+            id = ObjectId(this.id), nickname = this.nickname
         )
     }
 }

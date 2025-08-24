@@ -15,7 +15,8 @@ class Member(
     @Id
     val id: ObjectId = ObjectId.get(),
     val oauthInfo: OAuthInfo,
-    val nickname: String
+    val nickname: String,
+    val isVerified: Boolean = false
 ): Auditable()
 
 data class OAuthInfo(

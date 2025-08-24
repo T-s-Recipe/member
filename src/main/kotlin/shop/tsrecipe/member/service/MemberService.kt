@@ -1,5 +1,6 @@
 package shop.tsrecipe.member.service
 
+import org.bson.types.ObjectId
 import org.springframework.stereotype.Service
 import shop.tsrecipe.member.domain.Member
 import shop.tsrecipe.member.domain.OAuthInfo
@@ -37,5 +38,13 @@ class MemberService(
 
     suspend fun getNicknameByRandom(): String {
         return nicknameManager.getRandom()
+    }
+
+    suspend fun update(command: MemberUpdateCommand): Member {
+        return memberManager.update(command) ?: throw BaseException(ErrorCode.MEMBER_NOT_FOUND)
+    }
+
+    suspend fun withdrawal(id: ObjectId) {
+        memberManager.delete(id)
     }
 }
