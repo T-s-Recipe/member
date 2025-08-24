@@ -12,3 +12,8 @@ data class GetMemberQuery(
     val memberId: ObjectId?,
     val oauthInfo: OAuthInfo?
 )
+
+data class MemberUpdateCommand(
+    val id: ObjectId,
+    val nickname: String
+)
