@@ -8,15 +8,16 @@ import shop.tsrecipe.member.exception.BaseException
 import shop.tsrecipe.member.exception.ErrorCode
 import shop.tsrecipe.member.util.Logging
 import shop.tsrecipe.member.util.NicknameManager
+import kotlin.random.Random
 
 @Service
 class MemberService(
     private val memberManager: MemberManager,
     private val memberReader: MemberReader,
     private val nicknameManager: NicknameManager
-): Logging {
+) : Logging {
     suspend fun signUp(command: SignUpCommand): Member {
-        if (isDuplicated(command.oauthInfo)) throw BaseException(ErrorCode.MEMBER_DUPLICATED)
+        checkDuplicatedInfos(oauthInfo = command.oauthInfo, nickname = command.nickname)
 
         return memberManager.create(command) ?: run {
             logger.warn { "DB save failed.\n" }
@@ -24,7 +25,12 @@ class MemberService(
         }
     }
 
-    private suspend fun isDuplicated(oauthInfo: OAuthInfo): Boolean {
+    private suspend fun checkDuplicatedInfos(oauthInfo: OAuthInfo, nickname: String) {
+        if (isDuplicatedOAuthInfo(oauthInfo)) throw BaseException(ErrorCode.OAUTH_INFO_DUPLICATED)
+        if (isDuplicatedNickname(nickname)) throw BaseException(ErrorCode.NICKNAME_DUPLICATED)
+    }
+
+    private suspend fun isDuplicatedOAuthInfo(oauthInfo: OAuthInfo): Boolean {
         return memberReader.findOneByOAuthInfo(oauthInfo) != null
     }
 
@@ -37,7 +43,19 @@ class MemberService(
     }
 
     suspend fun getNicknameByRandom(): String {
-        return nicknameManager.getRandom()
+        var nickname = nicknameManager.getRandom()
+        repeat(10) {
+            if (!isDuplicatedNickname(nickname)) {
+                return nickname
+            }
+            nickname = nicknameManager.getRandom()
+        }
+
+        return "${nickname}+${Random.nextInt(1000)}"
+    }
+
+    suspend fun isDuplicatedNickname(nickname: String): Boolean {
+        return memberReader.findOneByNickname(nickname) != null
     }
 
     suspend fun update(command: MemberUpdateCommand): Member {

@@ -20,4 +20,8 @@ class MemberReader(
     suspend fun findOneByOAuthInfo(oauthInfo: OAuthInfo): Member? {
         return memberRepository.findByOauthInfoProviderAndOauthInfoId(oauthInfo.provider, oauthInfo.id).awaitSingleOrNull()
     }
+
+    suspend fun findOneByNickname(nickname: String): Member? {
+        return memberRepository.findByNickname(nickname).awaitSingleOrNull()
+    }
 }

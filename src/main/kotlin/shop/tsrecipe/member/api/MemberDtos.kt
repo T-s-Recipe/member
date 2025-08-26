@@ -95,15 +95,13 @@ data class GetMemberRequest(
 
 @Schema(description = "회원 정보 수정 RequestDTO")
 data class MemberUpdateRequest(
-    @field:Schema(description = "Member ID")
-    val id: String,
-
     @field:Schema(description = "닉네임")
     val nickname: String
 ) {
-    fun toCommand(): MemberUpdateCommand {
+    fun toCommand(memberId: ObjectId): MemberUpdateCommand {
         return MemberUpdateCommand(
-            id = ObjectId(this.id), nickname = this.nickname
+            id = memberId,
+            nickname = this.nickname
         )
     }
 }
