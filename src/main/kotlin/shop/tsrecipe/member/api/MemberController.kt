@@ -5,8 +5,10 @@ import io.swagger.v3.oas.annotations.tags.Tag
 import org.bson.types.ObjectId
 import org.springframework.http.ResponseEntity
 import org.springframework.web.bind.annotation.*
+import shop.tsrecipe.member.annotation.MemberId
 import shop.tsrecipe.member.domain.OAuthProvider
 import shop.tsrecipe.member.domain.toResponse
+import shop.tsrecipe.member.service.GetMemberQuery
 import shop.tsrecipe.member.service.MemberService
 import shop.tsrecipe.member.util.baseResponse
 
@@ -31,9 +33,12 @@ class MemberController(
         description = "회원 정보 수정 API"
     )
     @PatchMapping
-    suspend fun update(@RequestBody request: MemberUpdateRequest): ResponseEntity<MemberResponse> {
+    suspend fun update(
+        @MemberId memberId: ObjectId,
+        @RequestBody request: MemberUpdateRequest
+    ): ResponseEntity<MemberResponse> {
         return baseResponse(
-            body = memberService.update(request.toCommand()).toResponse()
+            body = memberService.update(request.toCommand(memberId)).toResponse()
         )
     }
 
@@ -41,11 +46,22 @@ class MemberController(
         summary = "회원 탈퇴",
         description = "회원 탈퇴 API"
     )
-    @DeleteMapping("/{memberId}")
-    suspend fun withdrawal(@PathVariable memberId: String): ResponseEntity<Void> {
-        memberService.withdrawal(ObjectId(memberId))
+    @DeleteMapping
+    suspend fun withdrawal(@MemberId memberId: ObjectId): ResponseEntity<Void> {
+        memberService.withdrawal(memberId)
 
         return ResponseEntity.noContent().build()
+    }
+
+    @Operation(
+        summary = "내 정보 조회",
+        description = "로그인한 사용자의 정보를 조회합니다."
+    )
+    @GetMapping("/me")
+    suspend fun getProfile(@MemberId memberId: ObjectId): ResponseEntity<MemberResponse> {
+        return baseResponse(
+            body = memberService.getMember(GetMemberQuery(memberId = memberId)).toResponse()
+        )
     }
 
     @Operation(
@@ -72,13 +88,24 @@ class MemberController(
     }
 
     @Operation(
-        summary = "랜덤 닉네임 조회",
-        description = "랜덤한 조합의 닉네임을 반환합니다."
+        summary = "랜덤 닉네임 반환",
+        description = "랜덤한 조합의 유일한 닉네임을 반환합니다. (중복 체크 불필요)"
     )
     @GetMapping("/nickname")
     suspend fun getRandomNickname(): ResponseEntity<String> {
         return baseResponse(
             body = memberService.getNicknameByRandom()
+        )
+    }
+
+    @Operation(
+        summary = "닉네임 중복 확인",
+        description = "이미 사용중인 닉네임인지 반환합니다. (T / F)"
+    )
+    @GetMapping("/nickname/check")
+    suspend fun checkNickname(@RequestParam nickname: String): ResponseEntity<Boolean> {
+        return baseResponse(
+            body = memberService.isDuplicatedNickname(nickname)
         )
     }
 }
